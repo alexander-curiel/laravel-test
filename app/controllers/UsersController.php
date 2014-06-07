@@ -2,6 +2,12 @@
 
 class UsersController extends BaseController {
 
+	public function __construct() {
+		//parent::__construct();
+
+		$this->beforeFilter('auth', array('except' => array('getLogin', 'postLogin')));
+	}
+
 	/**
 	 * Display a listing of the resource.
 	 *
@@ -32,6 +38,29 @@ class UsersController extends BaseController {
 	 */
 	public function store()
 	{
+/*		$user = new User;
+
+		$user->real_name = Input::get('real_name');
+		$user->email = Input::get('email');
+		$user->password = Input::get('password');
+
+		$user->save();
+
+		return Redirect::to('users');*/
+
+		$rules = array(
+			'real_name' => 'required|max:50',
+			'email' => 'required|email|unique:users',
+			'password' => 'required|min:5'
+			);
+
+		$validator = Validator::make(Input::all(), $rules);
+
+		if ($validator->fails()) {
+			return Redirect::back()->withInput()->withErrors($validator);
+		}
+
+		// create a user
 		$user = new User;
 
 		$user->real_name = Input::get('real_name');
@@ -40,7 +69,7 @@ class UsersController extends BaseController {
 
 		$user->save();
 
-		return Redirect::to('users');
+		return Redirect::toAction('users@index');
 	}
 
 

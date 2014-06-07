@@ -61,6 +61,11 @@ Route::get('login', 'AuthController@getLogin');
 Route::post('login', 'AuthController@postLogin');
 Route::get('logout', 'AuthController@getLogout');
 
+//Admin routes
+Route::get('admin', array('before' => 'auth', function() {
+	return View::make('admin.dashboard');
+}));
+
 
 // Sample
 Route::get('/', 'HomeController@showWelcome');

@@ -40,34 +40,34 @@ class AuthController extends BaseController {
 			return Redirect::to('login')
 				->withErrors($validator) // send back all errors to the login form
 				->withInput(Input::except('password')); // send back the input (not the password) so that we can repopulate the form
-			} else {
+		} else {
 
 			// create our user data for the authentication
-				$credentials = array(
-					'email' 	=> Input::get('email'),
-					'password' 	=> Input::get('password')
-					);
+			$credentials = array(
+				'email' 	=> Input::get('email'),
+				'password' 	=> Input::get('password')
+			);
 
 			// attempt to do the login
-				if (Auth::attempt($credentials)) {
+			if (Auth::attempt($credentials)) {
 
-				// validation successful!
-				// redirect them to the secure section or whatever
-				// return Redirect::to('secure');
-					return "Te has identificado como " . Auth::user()->real_name;
-					// return Redirect::to('account')->with('alert-success', 'You are now logged in.');
+			// validation successful!
+			// redirect them to the secure section or whatever
+			// return Redirect::to('secure');
+				return "Te has identificado como " . Auth::user()->real_name;
+				// return Redirect::to('account')->with('alert-success', 'You are now logged in.');
 
-				} else {
+			} else {
 
-				// validation not successful, send back to form
-					$errors = new MessageBag(['password' => ['Email y/o password incorrecto.']]);
-					return Redirect::to('login')						
-					->withErrors($errors)
-					->withInput(Input::except('password'));
-
-				}
+			// validation not successful, send back to form
+				$errors = new MessageBag(['password' => ['Email y/o password incorrecto.']]);
+				return Redirect::to('login')						
+				->withErrors($errors)
+				->withInput(Input::except('password'));
 
 			}
+
+		}
 
 
 
@@ -78,7 +78,7 @@ class AuthController extends BaseController {
 		public function getLogout() {
 			Auth::logout();
 
-			return Redirect::to('');
+			return View::make('auth.logout');
 		}
 
 	}
